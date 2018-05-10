@@ -14,4 +14,4 @@ test_matrix: Matrix.o Vector.o Exception.o test_matrix.cpp
 	./test_matrix
 
 clean:
-	rm -f *.o *~ use_vectors use_matrix
+	rm -f *.o *~ test_matrix use_matrix
