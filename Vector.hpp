@@ -30,6 +30,8 @@ private:
    double* mData;   // data stored in vector
    int mSize;      // size of vector
 
+   // functions only used internally, not for user purposes
+   friend Vector arnoldi(const Matrix& A, Matrix& Q, int k); // does kth iteration of arnoldi
 public:
    // constructors
    // No default constructor
@@ -87,7 +89,6 @@ public:
    friend Matrix qr(Matrix& A, bool explicit_Q);
 
    // iterative methods
-   friend Vector arnoldi(const Matrix& A, Matrix& Q, int k);
    friend Vector cg(const Matrix& A, const Vector& b, bool verbose, double TOL, int maxit);
    friend Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, double TOL, int maxit);
    friend Vector gmres(const Matrix& A, const Vector& b, bool verbose, double TOL, int maxit);

@@ -9,7 +9,7 @@
 
 using namespace std; 
 
-// function prototypes return number of tests failed
+// function prototypes for each of the names tests
 void test_constructors_and_index();
 void test_slice();
 void test_size_properties();
@@ -571,6 +571,15 @@ void test_det()
 
 	try
 	{
+		// 2x2 is implemented as a special case
+		// so it has its own test
+		Matrix I(2);
+		I(1, 1) = 1;
+		I(1, 2) = 2;
+		I(2, 1) = 2;
+		I(2, 2) = 3;
+		assert(det(I) == -1);
+
 		Matrix J(3);
 		J(1, 1) = 1;
 		J(1, 2) = 2;

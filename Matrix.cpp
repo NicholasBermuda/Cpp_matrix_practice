@@ -844,7 +844,7 @@ double Matrix::norm(string type) const
 		{
 			for (int j = 0; j < n; j++)
 			{
-				running_sum += pow(fabs(mData[i][j]),2);
+				running_sum += mData[i][j]*mData[i][j];
 			}
 		}
 
@@ -876,36 +876,40 @@ double Matrix::det() const
 			"Attempt to find det of non-square Matrix A");
 	}
 
-	// we find det with LU, so initialise the necessary matrices
-	Matrix A(*this);
-	Matrix U(mRows);
-	int perm_count;
-
-	// gets the two important quantities from LUP
-	perm_count = lu_det(A, U);
-
-	// det(A) = det(L)det(U)(-1)^s
-	// det(L) = 1
-	// for s = number of row swaps
-	
 	double det = 1.0;
 
-	// find the product of U diagonals
-	for (int i = 0; i < mRows; i++)
+	if (mRows == 2)
 	{
-		det *= U.mData[i][i];
-	}
-
-	// apply the correct sign
-	if (perm_count%2 == 0)
-	{
-		return det;
+		det = (mData[0][0] * mData[1][1]) - (mData[0][1] * mData[1][0]);
 	}
 	else
 	{
-		return -1*det;
+		// we find det with LU, so initialise the necessary matrices
+		Matrix A(*this);
+		Matrix U(mRows);
+		int perm_count;
+
+		// gets the two important quantities from LUP
+		perm_count = lu_det(A, U);
+
+		// det(A) = det(L)det(U)(-1)^s
+		// det(L) = 1
+		// for s = number of row swaps
+
+		// find the product of U diagonals
+		for (int i = 0; i < mRows; i++)
+		{
+			det *= U.mData[i][i];
+		}
+
+		// apply the correct sign
+		if (perm_count%2 != 0)
+		{
+			det *= -1;
+		}
 	}
 
+	return det;
 }
 
 

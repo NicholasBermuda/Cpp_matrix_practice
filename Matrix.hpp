@@ -16,8 +16,9 @@ private:
 	int mRows, mCols;
 	double** mData;
 
-	// function only used internally, not for user purposes
+	// functions only used internally, not for user purposes
 	friend int lu_det(Matrix& A, Matrix& U); // LU w/ pivotting but returns the number of permutes
+	friend Vector arnoldi(const Matrix& A, Matrix& Q, int k); // does kth iteration of arnoldi
 public:
 	// constructors
 	// no ``default'' constructor! must specify something about the matrix
@@ -122,7 +123,6 @@ public:
 	friend Vector forwardsub(const Matrix& A, const Vector& b);
 
 	// iterative linear solvers
-	friend Vector arnoldi(const Matrix& A, Matrix& Q, int k);
 	friend Vector cg(const Matrix& A, const Vector& b, bool verbose, double TOL, int maxit);
 	friend Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, double TOL, int maxit);
 	friend Vector gmres(const Matrix& A, const Vector& b, bool verbose, double TOL, int maxit);
@@ -182,9 +182,9 @@ Vector forwardsub(const Matrix& A, const Vector& b);
 
 // iterative methods
 Vector arnoldi(const Matrix& A, Matrix& Q, int k);
-Vector cg(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-15, int maxit = 100);
-Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-15, int maxit = 100);
-Vector gmres(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-15, int maxit = 100);
-Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-15, int maxit = 100);
+Vector cg(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
+Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
+Vector gmres(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
+Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
 
 #endif

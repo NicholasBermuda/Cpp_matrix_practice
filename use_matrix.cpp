@@ -11,6 +11,8 @@
 using namespace std;
 using namespace std::chrono;
 
+bool True = 1;
+
 // function prototypes for the timing tests to solve Ax = b
 Matrix build_A_matrix(int size); // builds a big SPD matrix A
 Vector build_RHS(int size); // builds a RHS b
@@ -123,7 +125,7 @@ Vector build_RHS(int size)
 
 // time the methods! not concerned with actual numerical result, just how long it takes
 // since we test the numerical accuracy in test_matrix
-// we run each method 25 times and find the average time
+// we run each method 30 times and find the average time
 double lu_time_function(Matrix& A, const Vector& b)
 {
 	high_resolution_clock::time_point t1, t2;
@@ -158,7 +160,7 @@ double lu_time_function(Matrix& A, const Vector& b)
 	
 	// stop the timer and determine average time
 	t2 = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>( (t2 - t1) / 25 ).count();
+	auto duration = duration_cast<microseconds>( (t2 - t1) / 30 ).count();
 	return duration;
 }
 
@@ -192,7 +194,7 @@ double qr_time_function(Matrix& A, const Vector& b)
 
 	// stop the timer and determine average time
 	t2 = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>( (t2 - t1) / 25 ).count();
+	auto duration = duration_cast<microseconds>( (t2 - t1) /30 ).count();
 
 	return duration;
 }
@@ -212,12 +214,20 @@ double cg_time_function(const Matrix& A, const Vector& b)
 
 	for (int test = 0; test < 30; test++)
 	{
-		x = cg(A, b);
+		if (test == 29) // see how many iterations it needs
+		{
+			x = cg(A, b, True);
+		}
+		else
+		{
+			x = cg(A, b);
+		}
+		
 	}
 
 	// stop the timer and determine average time
 	t2 = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>( (t2 - t1) / 25 ).count();
+	auto duration = duration_cast<microseconds>( (t2 - t1) /30 ).count();
 
 	return duration;
 }
@@ -239,12 +249,19 @@ double gmres_time_function(const Matrix& A, const Vector& b)
 	// run the test
 	for (int test = 0; test < 30; test++)
 	{
-		x = gmres(A, b);
+		if (test == 29) // see how many iterations it needs
+		{
+			x = gmres(A, b, True);
+		}
+		else
+		{
+			x = gmres(A, b);
+		}
 	}
 
 	// stop the timer and determine average time
 	t2 = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>( (t2 - t1) / 25 ).count();
+	auto duration = duration_cast<microseconds>( (t2 - t1) /30 ).count();
 
 	return duration;
 }
