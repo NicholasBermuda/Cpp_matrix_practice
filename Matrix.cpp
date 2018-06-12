@@ -1596,10 +1596,9 @@ Vector arnoldi(const Matrix& A, Matrix& Q, int k)
 
 	// normalise
 	hk.mData[k] = qk.norm();
-	if (hk.mData[k] == 0)
+	if (hk.mData[k] < 1E-12 || k == A.mRows) // the convergence critera; we have reproduced the Krylov space
 	{
-		// termination criteria
-		// don't try to normalise qk
+		hk.mData[k] = 0;
 	}
 	else
 	{
@@ -1654,13 +1653,14 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 	// 		"Attempt to use gmres with singular A");
 	// }
 	
+	bool stop = 0; // stop criteria flag
 	int k = 0; // iteration number
 	double tmp1, tmp2, rkp2_p, normb = b.norm(); // declare useful variables
 	Matrix H(maxit + 1, maxit + 1); // allocate all the memory needed for H
 	Vector hk(b.mSize), normbe1(maxit + 1); // storage for result of arnoldi and "RHS" of LLS
 	normbe1.mData[0] = normb;
 	
-	// storage for the Given's refections
+	// storage for the Givens refections
 	double* sink;
 	sink = new double[maxit];
 	sink[0] = 1.0;
@@ -1689,15 +1689,14 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 		Vector hk(k + 1);
 		hk = arnoldi(A, Q, k);
 
-		if (hk.mData[k] == 0)
+		if (hk.mData[k] < 1E-15) // redundant check but don't compare to zero!
 		{
-			// Arnoldi reached the termination criteria
-			// this means the solution is in the current Krylov space
-			// and so residual will definitely be zero
-			break;
+			// this is a stop criteria
+			stop = 1;
 		}
 
-		// apply the old Given's rotation to the new column of H
+
+		// apply the old Givens rotation to the new column of H
 		if (k > 1)
 		{
 			for (int j = 0; j < k-1; j++)
@@ -1711,16 +1710,16 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 		}
 
 		
-		// find Given's rotation
+		// find Givens rotation
 		rkp2_p = sqrt((hk.mData[k-1] * hk.mData[k-1]) + (hk.mData[k] * hk.mData[k]));
 		cosk[k-1] = hk.mData[k-1] / rkp2_p;
 		sink[k-1] = -hk.mData[k] / rkp2_p;
 
-		// now do Given's rotation on the new column
+		// now do Givens rotation on the new column
 		hk.mData[k-1] = (cosk[k-1] * hk.mData[k-1]) - (sink[k-1] * hk.mData[k]);
 		hk.mData[k] = 0;
 
-		// apply the Given's rotation to norm(b)*e1:
+		// apply the Givens rotation to norm(b)*e1:
 		tmp1 = (cosk[k-1] * normbe1.mData[k-1]) - (sink[k-1] * normbe1.mData[k]);
 		tmp2 = (sink[k-1] * normbe1.mData[k-1]) + (cosk[k-1] * normbe1.mData[k]);
 		normbe1.mData[k-1] = tmp1;
@@ -1731,6 +1730,12 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 		for (int i = 0; i < k; i++)
 		{
 			H.mData[i][k-1] = hk.mData[i];
+		}
+
+		if (stop)
+		{
+			// break if we reach the 
+			break;
 		}
 
 		// check the residual
@@ -1744,9 +1749,14 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 	// informative output
 	if (verbose)
 	{
-		if (k > maxit)
+		if (k >= maxit)
 		{
-			cout << "GMRES terminated after reaching maximum iteration count,\n";
+			cout << "GMRES terminated after reaching maximum iteration count.\n";
+			cout << "Residual of solution was = " << residual << "\n";
+		}
+		else if (stop)
+		{
+			cout << "GMRES terminanted after reaching the dimension of the matrix.\n";
 			cout << "Residual of solution was = " << residual << "\n";
 		}
 		else
@@ -1769,5 +1779,6 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 	// and solve the problem
 	Vector yk(k);
 	yk = backsub(Hk, normbe1k);
+
 	return x0 + (Qk * yk);
 }

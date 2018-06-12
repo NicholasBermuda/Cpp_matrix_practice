@@ -182,9 +182,9 @@ Vector forwardsub(const Matrix& A, const Vector& b);
 
 // iterative methods
 Vector arnoldi(const Matrix& A, Matrix& Q, int k);
-Vector cg(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
-Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
-Vector gmres(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
-Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-15, int maxit = 256);
+Vector cg(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-12, int maxit = 256);
+Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-12, int maxit = 256);
+Vector gmres(const Matrix& A, const Vector& b, bool verbose = 0, double TOL = 1E-12, int maxit = 256);
+Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose = 0, double TOL = 1E-12, int maxit = 256);
 
 #endif

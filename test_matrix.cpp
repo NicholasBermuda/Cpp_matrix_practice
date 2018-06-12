@@ -735,8 +735,8 @@ void test_iterative_solvers()
 		Vector x2(32);
 		x2 = gmres(A2, b2, verbose);
 		assert(fabs((A2 * x2).norm() - b2.norm()) < 1E-12);
-		// less precision below because we are limited by the initialisation values
-		// of xtest and how precise we write the csvs from MATLAB :)
+		// // less precision below because we are limited by the initialisation values
+		// // of xtest and how precise we write the csvs from MATLAB :)
 		assert(fabs((xtest).norm() - x2.norm()) < 1E-5);
 
 		x2 = cg(A2, b2, verbose);

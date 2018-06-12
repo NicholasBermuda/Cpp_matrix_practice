@@ -27,7 +27,7 @@ int main()
 	try
 	{
 	int size = 256;
-	assert(size%8 == 0); // make sure we have a size that can be used
+	assert(size % 8 == 0); // make sure we have a size that can be used
 
 	Matrix Ahuge(size), Abig(size / 2), Asmall(size / 4), Atiny(size / 8);
 
@@ -68,7 +68,7 @@ int main()
 	times(4, 3) = gmres_time_function(Abig, bbig);
 	times(4, 4) = gmres_time_function(Ahuge, bhuge);
 
-	// just look: no further explanation given here; discussed elsewhere
+	// just look: no further explanation given here; discussed and analysed
 	cout << times << "\n";
 
 	}
@@ -161,6 +161,7 @@ double lu_time_function(Matrix& A, const Vector& b)
 	// stop the timer and determine average time
 	t2 = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>( (t2 - t1) / 30 ).count();
+	
 	return duration;
 }
 
