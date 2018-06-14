@@ -1112,10 +1112,6 @@ Matrix qr(Matrix& A, bool explicit_Q)
 		normV = V.norm(2); // new norm of V
 		V = V/normV; // normalise V
 
-		// find dot product of V and V'
-		// Matrix VdotVT(V.mSize);
-		// VdotVT = outer(V, V);
-
 		// do the matrix multiplication on a slice of A
 		Matrix Aslice(V.mSize);
 		Aslice = slice(A, k + 1, A.mRows, k + 1, A.mCols);

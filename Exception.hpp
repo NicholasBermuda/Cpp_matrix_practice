@@ -19,16 +19,14 @@
 //  the function DebugPrint() prints details of the error
 
 
-
-
 #include <string>
 
 class Exception
 {
 public:
-  std::string problem, summary;
-  Exception(std::string sum, std::string problem);
-  void DebugPrint();
+    std::string problem, summary;
+    Exception(std::string sum, std::string problem);
+    void DebugPrint();
 };
 
 #endif
