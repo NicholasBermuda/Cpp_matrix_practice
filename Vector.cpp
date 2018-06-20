@@ -123,7 +123,7 @@ Vector operator/(const Vector& v, const double& a)
      throw Exception("div 0", "Attempt to divide by zero.");
   }
 
-  double arecip = 1.0/a;
+  double arecip = 1.0 / a;
 
   // don't duplicate code
   return v * arecip;
@@ -185,13 +185,17 @@ double& Vector::operator()(int i)
 ostream& operator<<(ostream& output, const Vector& v)
 {
   output << "(";
-  for (int i=0; i<v.mSize; i++)
+  for (int i = 0; i < v.mSize; i++)
     { 
       output << v.mData[i];
       if (i != v.mSize - 1)
+      {
 	       output << ", ";
+      }
       else
+      {
 	       output << ")";
+      }
     }
 
   return output;  // for multiple << operators.
@@ -207,9 +211,13 @@ string to_string(const Vector& v)
      { 
         output += to_string(v.mData[i]);
         if (i != v.mSize - 1)
+        {
           output += ", ";
+        }
         else
+        {
           output += ")";
+        }
       }
 
   return output;

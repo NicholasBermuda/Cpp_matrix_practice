@@ -109,7 +109,7 @@ Matrix::Matrix(int size, string type)
 	if (type != "eye")
 	{
 		throw Exception("invalid parameter",
-			"Attempt to crate invalid special matrix. Currently supported: eye, diag.");
+			"Attempt to create invalid special matrix. Currently supported: eye, diag.");
 	}
 
 	if (type == "eye")
@@ -118,7 +118,7 @@ Matrix::Matrix(int size, string type)
 			{
 				for (int j = 0; j < size; j++)
 				{
-					if (i==j)
+					if (i == j)
 					{
 						mData[i][j] = 1.0;
 					}
@@ -131,6 +131,8 @@ Matrix::Matrix(int size, string type)
 	}
 }
 
+
+// special constructor for eye for given rows, cols
 Matrix::Matrix(int rows, int cols, string type)
 {
 	// allocate memory
@@ -166,6 +168,7 @@ Matrix::Matrix(int rows, int cols, string type)
 } // end constructor
 
 
+// special constructor for diag for given rows, cols, value 
 Matrix::Matrix(int rows, int cols, string type, double initVal)
 {
 	// allocate memory
@@ -191,7 +194,7 @@ Matrix::Matrix(int rows, int cols, string type, double initVal)
 		{
 			for (int c = 0; c < cols; c++)
 			{
-				if (r==c)
+				if (r == c)
 				{
 					mData[r][c] = initVal;
 				}
@@ -205,7 +208,7 @@ Matrix::Matrix(int rows, int cols, string type, double initVal)
 } // end constructor
 
 
-// 
+// square 
 Matrix::Matrix(int size, string type, double initVal)
 {
 	// allocate memory
@@ -230,7 +233,7 @@ Matrix::Matrix(int size, string type, double initVal)
 		{
 			for (int j = 0; j < size; j++)
 			{
-				if (i==j)
+				if (i == j)
 				{
 					mData[i][j] = initVal;
 				}
@@ -284,9 +287,9 @@ double& Matrix::operator()(int i, int j)
 	// dimension checking
 	if (i <= 0 || j <= 0 || i > mRows || j > mCols)
 	{
-		throw Exception("index range","Attempt to index Matrix out of range.");
+		throw Exception("index range", "Attempt to index Matrix out of range.");
 	}
-	return mData[i-1][j-1];
+	return mData[i - 1][j - 1];
 }
 
 
@@ -299,7 +302,7 @@ double& Matrix::operator()(int i)
 	// dimension checking
 	if (i < 0 || i > mRows*mCols)
 	{
-		throw Exception("index range","Attempt to index Matrix out of range.");
+		throw Exception("index range", "Attempt to index Matrix out of range.");
 	}
 
 	// find the right entry
@@ -310,7 +313,7 @@ double& Matrix::operator()(int i)
 }
 
 
-// get rows and columns of A as Vectors
+// get columns of A as Vectors
 Vector col_slice(const Matrix& A, int col)
 {
 	Vector output(A.mRows);
@@ -324,6 +327,7 @@ Vector col_slice(const Matrix& A, int col)
 }
 
 
+// get rows of A as Vectors
 Vector row_slice(const Matrix& A, int row)
 {
 	Vector output(A.mCols);
@@ -343,11 +347,11 @@ Matrix slice(const Matrix& A, int row_start, int row_end, int col_start, int col
 	// allocate the right size
 	Matrix output(row_end - row_start + 1, col_end - col_start + 1);
 
-	for (int i = 0; i < row_end-row_start+1; i++)
+	for (int i = 0; i < row_end-row_start + 1; i++)
 	{
-		for (int j = 0; j < col_end-col_start+1; j++)
+		for (int j = 0; j < col_end-col_start + 1; j++)
 		{
-			output.mData[i][j] = A.mData[row_start+i-1][col_start+j-1];
+			output.mData[i][j] = A.mData[row_start + i - 1][col_start + j - 1];
 		}
 	}
 
@@ -515,7 +519,7 @@ Matrix operator+(const Matrix& A, const Matrix& B)
 Matrix operator-(const Matrix& A)
 {
 	// create the matix and fill it in
-	Matrix result(A.mRows,A.mCols);
+	Matrix result(A.mRows, A.mCols);
 
 	for (int row = 0; row < A.mRows; row++)
 	{
@@ -557,7 +561,7 @@ Matrix operator*(const Matrix& A, const Matrix& B)
 			// do the dot product
 			for (int j = 0; j < B.mRows; j++)
 			{
-				output.mData[row][col] += A.mData[row][j]*B.mData[j][col];
+				output.mData[row][col] += A.mData[row][j] * B.mData[j][col];
 			}
 		}
 	}
@@ -586,7 +590,7 @@ Matrix operator*(const Matrix& A, const double& c)
 Matrix operator*(const double& c, const Matrix& A)
 {
 	// scalar multiplication commutes: don't duplicate code
-	return A*c;
+	return A * c;
 }
 
 
@@ -609,7 +613,7 @@ Vector operator*(const Matrix& A, const Vector& x)
 		// do the dot product
 		for (int j = 0; j < x.mSize; j++)
 		{
-			output.mData[i] += A.mData[i][j]*x.mData[j];
+			output.mData[i] += A.mData[i][j] * x.mData[j];
 		}
 	}
 
@@ -636,7 +640,7 @@ Vector operator*(const Vector& x, const Matrix& A)
 		// do the dot product
 		for (int j = 0; j < A.mRows; j++)
 		{
-			output.mData[i] += x.mData[j]*A.mData[j][i];
+			output.mData[i] += x.mData[j] * A.mData[j][i];
 		}
 	}
 
@@ -656,7 +660,7 @@ Matrix operator/(const Matrix& A, const double& c)
 	// do this as a scalar multiplication: don't duplicate code
 	double d = 1.0/c;
 
-	return A*d;
+	return A * d;
 }
 
 
@@ -709,7 +713,7 @@ int* Matrix::size() const
 
 int Matrix::length() const
 {
-	return mRows*mCols;
+	return mRows * mCols;
 }
 
 
@@ -761,8 +765,8 @@ bool Matrix::is_singular() const
 	double this_det;
 	this_det = this->det();
 
-	// if det is O(eps), assume it's zero
-	if (fabs(this_det) <= 1E-15)
+	// if det is O(about eps), assume it's zero
+	if (fabs(this_det) <= 1E-14)
 	{
 		singular = 1;
 	}
@@ -844,7 +848,7 @@ double Matrix::norm(string type) const
 		{
 			for (int j = 0; j < n; j++)
 			{
-				running_sum += mData[i][j]*mData[i][j];
+				running_sum += mData[i][j] * mData[i][j];
 			}
 		}
 
@@ -981,7 +985,7 @@ Matrix outer(const Vector& v1, const Vector& v2)
     {
         for (int j = 0; j < v2.mSize; j++)
         {
-            output.mData[i][j] = v1.mData[i]*v2.mData[j];
+            output.mData[i][j] = v1.mData[i] * v2.mData[j];
         }
     }
 
@@ -1010,12 +1014,12 @@ Vector backsub(const Matrix& A, const Vector& b)
 	Vector x(b.mSize);
 
 	// do the back sub
-	for (int i = b.mSize-1; i >= 0; i--)
+	for (int i = b.mSize - 1; i >= 0; i--)
 	{	
 		x.mData[i] = b.mData[i];
-		for (int j = i+1; j < b.mSize; j++)
+		for (int j = i + 1; j < b.mSize; j++)
 		{
-			x.mData[i] -= x.mData[j]*A.mData[i][j];
+			x.mData[i] -= x.mData[j] * A.mData[i][j];
 		}
 		x.mData[i] /= A.mData[i][i];
 	}
@@ -1049,7 +1053,7 @@ Vector forwardsub(const Matrix& A, const Vector& b)
 		x.mData[i] = b.mData[i];
 		for (int j = 0; j < i; j++)
 		{
-			x.mData[i] -= x.mData[j]*A.mData[i][j];
+			x.mData[i] -= x.mData[j] * A.mData[i][j];
 		}
 		x.mData[i] /= A.mData[i][i];
 	}
@@ -1110,7 +1114,7 @@ Matrix qr(Matrix& A, bool explicit_Q)
 		}
 
 		normV = V.norm(2); // new norm of V
-		V = V/normV; // normalise V
+		V = V / normV; // normalise V
 
 		// do the matrix multiplication on a slice of A
 		Matrix Aslice(V.mSize);
@@ -1341,7 +1345,7 @@ int lu_det(Matrix& A, Matrix& U)
 	}
 
 	// un-permute A so it remains as the original
-	A = P*A;
+	A = P * A;
 
 	return perm_count;
 
@@ -1450,7 +1454,7 @@ Matrix lu(Matrix& A, Matrix& U, Matrix& P)
 	}
 
 	// un-permute A so it remains as the original
-	A = P*A;
+	A = P * A;
 
 	return L;
 
@@ -1509,15 +1513,15 @@ Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, doub
 	Vector Apk(b.mSize); // to store the mat-vec multiplication
 
 	// starting points
-	rk = b - A*xk;
+	rk = b - A * xk;
 	Vector pk(rk); // p_0 == r_0
 
 	// big loop
 	while (k < maxit)
 	{
 		// find useful products
-		Apk = A*pk;
-		rk2 = rk*rk;
+		Apk = A * pk;
+		rk2 = rk * rk;
 
 		// do the CG calculation
 		alpha = (rk2) / (pk * Apk);
@@ -1530,7 +1534,7 @@ Vector cg(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, doub
 			break;
 		}
 
-		beta = (rkp1 * rkp1)/(rk2);
+		beta = (rkp1 * rkp1) / (rk2);
 		pkp1 = rkp1 + (beta * pk);
 		
 		// update the iterates
@@ -1570,7 +1574,7 @@ Vector arnoldi(const Matrix& A, Matrix& Q, int k)
 
 
 	// the output is the next column of the matrix H
-	Vector hk(k+1);
+	Vector hk(k + 1);
 
 	// Vector qk is column k of matrix Q
 	Vector qk(Q.mRows);
@@ -1667,7 +1671,7 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 	// allocate memory to hold the basis vectors of the Krylov space
 	Matrix Q(A.mRows, maxit + 1);
 	
-	double residual = (b - A*x0).norm(); // initialise residual
+	double residual = (b - A * x0).norm(); // initialise residual
 
 	// fill in the first columns
 	H.mData[0][0] = normb;
@@ -1695,37 +1699,37 @@ Vector gmres(const Matrix& A, const Vector& b, const Vector& x0, bool verbose, d
 		// apply the old Givens rotation to the new column of H
 		if (k > 1)
 		{
-			for (int j = 0; j < k-1; j++)
+			for (int j = 0; j < k - 1; j++)
 			{
-				tmp1 = (cosk[j] * hk.mData[j]) - (sink[j] * hk.mData[j+1]);
-				tmp2 = (sink[j] * hk.mData[j]) + (cosk[j] * hk.mData[j+1]);
+				tmp1 = (cosk[j] * hk.mData[j]) - (sink[j] * hk.mData[j + 1]);
+				tmp2 = (sink[j] * hk.mData[j]) + (cosk[j] * hk.mData[j + 1]);
 				hk.mData[j] = tmp1;
-				hk.mData[j+1] = tmp2;
+				hk.mData[j + 1] = tmp2;
 
 			}
 		}
 
 		
 		// find Givens rotation
-		rkp2_p = sqrt((hk.mData[k-1] * hk.mData[k-1]) + (hk.mData[k] * hk.mData[k]));
-		cosk[k-1] = hk.mData[k-1] / rkp2_p;
-		sink[k-1] = -hk.mData[k] / rkp2_p;
+		rkp2_p = sqrt((hk.mData[k - 1] * hk.mData[k - 1]) + (hk.mData[k] * hk.mData[k]));
+		cosk[k - 1] = hk.mData[k - 1] / rkp2_p;
+		sink[k - 1] = -hk.mData[k] / rkp2_p;
 
 		// now do Givens rotation on the new column
-		hk.mData[k-1] = (cosk[k-1] * hk.mData[k-1]) - (sink[k-1] * hk.mData[k]);
+		hk.mData[k - 1] = (cosk[k - 1] * hk.mData[k - 1]) - (sink[k - 1] * hk.mData[k]);
 		hk.mData[k] = 0;
 
 		// apply the Givens rotation to norm(b)*e1:
-		tmp1 = (cosk[k-1] * normbe1.mData[k-1]) - (sink[k-1] * normbe1.mData[k]);
-		tmp2 = (sink[k-1] * normbe1.mData[k-1]) + (cosk[k-1] * normbe1.mData[k]);
-		normbe1.mData[k-1] = tmp1;
+		tmp1 = (cosk[k - 1] * normbe1.mData[k - 1]) - (sink[k - 1] * normbe1.mData[k]);
+		tmp2 = (sink[k - 1] * normbe1.mData[k - 1]) + (cosk[k - 1] * normbe1.mData[k]);
+		normbe1.mData[k - 1] = tmp1;
 		normbe1.mData[k] = tmp2;
 		residual = fabs(tmp2);
 
 		// store the new column in H
 		for (int i = 0; i < k; i++)
 		{
-			H.mData[i][k-1] = hk.mData[i];
+			H.mData[i][k - 1] = hk.mData[i];
 		}
 
 		if (stop)

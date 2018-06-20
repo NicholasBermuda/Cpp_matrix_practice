@@ -23,17 +23,17 @@ public:
 	// constructors
 	// no ``default'' constructor! must specify something about the matrix
 	// construct matrix of given size
-	Matrix(int numentries);
-	Matrix(int numrows, int numcols);
+	Matrix(int size); // make a square matrix (size x size)
+	Matrix(int numrows, int numcols); // make a matrix (numrows x numcols)
 
 	// construct matrix of given size initialised to a certain value
-	Matrix(int numentries, double initVal);
+	Matrix(int size, double initVal);
 	Matrix(int numrows, int numcols, double initVal);
 
 	// special matrix constructors
-	Matrix(int numentries, string type);
+	Matrix(int size, string type);
 	Matrix(int numrows, int numcols, string type);
-	Matrix(int numentries, string type, double initVal);
+	Matrix(int size, string type, double initVal);
 	Matrix(int numrows, int numcols, string type, double initVal);
 
 	// overridden copy constructor
@@ -130,7 +130,7 @@ public:
 
 };
 
-// all the function prototypes are given below, no need to include member methods
+// all the friend function prototypes are given below: no need to include member methods
 int length(const Matrix& A);
 int width(const Matrix& A);
 int height(const Matrix& A);

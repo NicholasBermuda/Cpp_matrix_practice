@@ -13,6 +13,6 @@ Exception::Exception(std::string sum, std::string prob)
 
 void Exception::DebugPrint()
 {
-    std::cerr << "**  Exception ("<<summary<<") **\n";
+    std::cerr << "**  Exception (" << summary << ") **\n";
     std::cerr << "Problem: " << problem << "\n\n";
 }

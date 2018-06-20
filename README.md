@@ -10,4 +10,8 @@ All code is mine unless otherwise noted!
 * test_matrix.cpp - some basic unit tests for the Matrix class. Executed whenever Matrix.o is recompiled - handy!
 * use_matrix.cpp - a brief exploration of the rate of growth of the LU, QR, CG, and GMRES linear solvers in my Matrix class.
 * matrix_writer.py - a utility program to convert a MATLAB csv file of [a matrix A, RHS b, and solution x of the problem Ax = b] into C++ code compatible with my Matrix class -- used for writing a unit test. Requirements: appropriately named csv files
-* Makefile - to compile the above appropriately. USAGE: simply `make all`
+* Makefile - to compile the above appropriately.
+
+# Installation
+* `make all`
+* test_matrix.cpp will run after compilation to ensure changes to the code have not broken functionality
